@@ -46,6 +46,18 @@ public class PertChartGUI extends JFrame implements ActionListener
         preTable = new JTable(preTableModel);
         preTable.setPreferredScrollableViewportSize(new Dimension(500, 200));
         preTable.setFillsViewportHeight(false);
+        preTable.addKeyListener(new KeyListener()
+            {
+                public void keyPressed(KeyEvent e)
+                {
+                    if (e.getKeyCode()==KeyEvent.VK_ENTER)
+                    {
+                        preTableModel.addRow(new Object[]{"", ""});
+                    } 
+                }
+                public void keyReleased(KeyEvent e) { }
+                public void keyTyped(KeyEvent e) { } 
+            });
         tablePanel.add(new JScrollPane(preTable));
         c.add(tablePanel, BorderLayout.NORTH);
         
@@ -75,6 +87,11 @@ public class PertChartGUI extends JFrame implements ActionListener
         {
             doSingleRun();
         }
+        
+        else if (e.getSource() == runSim)
+        {
+            runSimulator();
+        }
     }//actionPerformed
     
     
@@ -90,6 +107,20 @@ public class PertChartGUI extends JFrame implements ActionListener
         {
             int resNum = Integer.parseInt(Resources.getText());
             
+            /**call method singRun(resNum, preTableModel)
+             * that method needs to return a 2d char array for table building.
+             */
+            
+            //Some test code for preTableModel data retrieval
+            for(int i = 0; i < preTableModel.getRowCount(); ++i)
+            {
+                for(int j = 0; j < preTableModel.getColumnCount(); ++j)
+                {
+                    System.out.print(preTableModel.getValueAt(i, j) + " ");
+                }
+                System.out.println("");
+            }
+            
             String[][] tempData = {{"","","","","","",""},{"","","","","","",""},{"","","","","","",""}};
             
             SingleTableGUI gui = new SingleTableGUI(resNum, tempData);
@@ -97,9 +128,37 @@ public class PertChartGUI extends JFrame implements ActionListener
         catch (NumberFormatException e)
         {
             JOptionPane.showMessageDialog(null, "Enter a number in the Total Resources field.", "Error", JOptionPane.ERROR_MESSAGE);
+        }  
+    }
+    
+    public void runSimulator()
+    {
+        try
+        {
+            int resNum = Integer.parseInt(Resources.getText());
+            
+            while(true)
+            {
+                try
+                {
+                    String input = JOptionPane.showInputDialog("Enter number of runs:");
+                    int numRuns = Integer.parseInt(input);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    JOptionPane.showMessageDialog(null, "Use a number!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Enter a number in the Total Resources field.", "Error", JOptionPane.ERROR_MESSAGE);
         }
         
-        
-        
+        /**
+         * Call method simulation(resNum, preTableModel, numRuns)
+         * returns average project completion time.
+         */
     }
 }
