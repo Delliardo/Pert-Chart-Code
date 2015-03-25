@@ -5,10 +5,32 @@
  */
 package pertchart;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author zac
  */
 public class Calculations {
     
+    private ArrayList<Activity> activities;
+    
+    public Calculations() {
+        activities = new ArrayList();
+    }
+    
+    public ArrayList<Activity> generateHardCodedActivities() {
+        ArrayList<Activity> activityList = new ArrayList();
+        Activity a = new Activity("A", 2.0, "", 1.0);
+        Activity b = new Activity("B", 1.0, "A", 2.0);
+        Activity c = new Activity("C", 1.0, "A", 1.0);
+        Activity d = new Activity("D", 1.0, "B", 4.0);
+        Activity e = new Activity("E", 1.0, "D", 3.0);
+        activityList.add(a);
+        activityList.add(b);
+        activityList.add(c);
+        activityList.add(d);
+        activityList.add(e);
+        return activityList;
+    }
 }
