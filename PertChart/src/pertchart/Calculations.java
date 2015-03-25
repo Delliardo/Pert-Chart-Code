@@ -23,28 +23,11 @@ public class Calculations {
         this.activities = new ArrayList();
     }
     
-    public ArrayList<Activity> generateHardCodedActivities() {
-        ArrayList<Activity> activityList = new ArrayList();
-        Activity a = new Activity("A", 2.0, "", 1.0);
-        Activity b = new Activity("B", 1.0, "A", 2.0);
-        Activity c = new Activity("C", 3.0, "A,B", 1.0);
-        Activity d = new Activity("D", 2.0, "B", 4.0);
-        Activity e = new Activity("E", 5.0, "D", 3.0);
-        activityList.add(a);
-        activityList.add(b);
-        activityList.add(c);
-        activityList.add(d);
-        activityList.add(e);
-        return activityList;
-    }
-    
     public void run() {
-        //project = new Project(15, 20, 30, "days");
-        this.activities = generateHardCodedActivities();
         determinePredecessors();
         determineSuccessors();
         calculateProjectCompletionTime();
-        System.out.println(getPrintedResults());
+        getPrintedResults();
     }
     
     public Activity getActivityById(String s) {
@@ -134,10 +117,6 @@ public class Calculations {
                 }
             }
         }
-        //double expectedActivityTime = (project.getOptimisticTime() + (4 * project.getMostLikelyTime()) + project.getPessimisticTime()) / 6;
-        //double standardDev = Math.sqrt(Math.pow(project.getPessimisticTime() - project.getOptimisticTime(), 2) / 36);
-        //System.out.println("Project expected time " + expectedActivityTime);
-        //System.out.println("Project standardDev time " + standardDev);
         project.setExpectedDuration(projectCompletionTime);
     }
     
