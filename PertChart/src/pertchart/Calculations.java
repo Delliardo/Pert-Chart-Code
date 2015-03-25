@@ -33,4 +33,26 @@ public class Calculations {
         activityList.add(e);
         return activityList;
     }
+    
+    public void run() {
+        
+    }
+    
+    public void determinePredecessors() {
+        for (Activity a: this.activities) {
+            for (Activity b: this.activities) {
+                String p = b.getPredecessorsInput();
+                String[] pList = p.split(",");
+                for (String s: pList) {
+                    if (s != a.getActivityId()) {
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    public String getPrintedResults() {
+        return "";
+    }
 }
