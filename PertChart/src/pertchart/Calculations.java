@@ -14,8 +14,10 @@ import java.util.ArrayList;
 public class Calculations {
     
     protected ArrayList<Activity> activities;
+    private Project project;
     
-    public Calculations() {
+    public Calculations(double a, double m, double b, String di) {
+        this.project = new Project(a, m, b, di);
         activities = new ArrayList();
     }
     
