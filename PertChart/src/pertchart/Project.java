@@ -25,7 +25,7 @@ public class Project {
     private double expectedDuration;
     private double expectedDurationStandardDeviation;
     
-    Project(double a, double m, double b, String di){
+    Project(double a, double m, double b, String di) {
         this.optimisticTime = a;
         this.mostLikelyTime = m;
         this.pessimisticTime = b;
