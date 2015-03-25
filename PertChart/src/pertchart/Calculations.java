@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Calculations {
     
-    private ArrayList<Activity> activities;
+    protected ArrayList<Activity> activities;
     
     public Calculations() {
         activities = new ArrayList();
