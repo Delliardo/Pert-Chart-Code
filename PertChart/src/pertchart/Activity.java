@@ -51,12 +51,20 @@ public class Activity {
         return successors;
     }
     
-     public double getResources() {
+    public double getResources() {
         return resources;
     }
 
-    public void setResources(double resources) {
-        this.resources = resources;
+    public void setResources(double r) {
+        this.resources = r;
+    }
+    
+    public String getPredecessorsInput() {
+        return predecessorsInput;
+    }
+
+    public void setPredecessorsInput(String p) {
+        this.predecessorsInput = p;
     }
     
     public String getActivityId() {
