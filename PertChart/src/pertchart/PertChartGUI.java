@@ -92,8 +92,8 @@ public class PertChartGUI extends JFrame implements ActionListener {
         // projectPanel.add(simulationGraph);
 
         outerPanel.add(projectPanel, BorderLayout.SOUTH);
-//        SimulatorGraph graph = new SimulatorGraph();
-//        add(graph);
+        //SimulatorGraph graph = new SimulatorGraph();
+        //add(graph);
 
         add(outerPanel, BorderLayout.CENTER);
 
@@ -111,20 +111,9 @@ public class PertChartGUI extends JFrame implements ActionListener {
 
         if (e.getSource() == runSim) {
             runSimulator();
+            System.exit(0);
         } else if (e.getSource() == simulationGraph) {
-            /*
-            
-             This code can be used later to display the graph
-             JFrame frame = new JFrame();
-             frame.setTitle("Simulation Graph");
-             frame.setResizable(true);
-             frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-             frame.setVisible(true);
-             frame.setSize(500,350);
-             graph = new SimulatorGraph();
-             frame.add(graph);
-             */
-
+            // TODO: implement graph gui
         }
 
     }//actionPerformed
@@ -148,21 +137,13 @@ public class PertChartGUI extends JFrame implements ActionListener {
 
         for (int i = 0; i < preTableModel.getRowCount(); ++i) {
             try {
-
                 durationValue = Double.parseDouble((String) preTableModel.getValueAt(i, 1));
-                System.out.println(durationValue);
                 resourcesValue = Double.parseDouble((String) preTableModel.getValueAt(i, 3));
-                System.out.println(resourcesValue);
-                System.out.println((String) preTableModel.getValueAt(i, 0));
-                System.out.println((String) preTableModel.getValueAt(i, 2));
-                
-
                 activity = new Activity((String) preTableModel.getValueAt(i, 0), durationValue,(String) preTableModel.getValueAt(i, 2) , resourcesValue);
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Activity information has been entered incorrectly", "Error", JOptionPane.ERROR_MESSAGE);
             }
             calculations.activities.add(activity);
-
         }
 
         calculations.run();
