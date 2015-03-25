@@ -13,15 +13,17 @@ import java.util.ArrayList;
  */
 public class Activity {
     
+    
+    //Values from the input 
     private String activityId;
-    private String description;
-    private double optimisticTime;
-    private double mostLikelyTimeTime;
-    private double pessimisticTime;
+    private double duration;
+    private double resources;
+
+    private String predecessorsInput;
     private ArrayList<Activity> predecessors;
     private ArrayList<Activity> successors;
-    private double duration;
-    private double deadline;
+    
+    //To be calculated from doing the CPM portion
     private double earliestStartTime;
     private double latestStartTime;
     private double earliestCompletionTime;
@@ -32,60 +34,45 @@ public class Activity {
     private float interferingSlack;
     private float independentSlack;
     
+    Activity(String a, double d, String p, double r){
+        this.activityId = a;
+        this.duration = d;
+        this.predecessorsInput = p;
+        this.resources = r;
+        this.predecessors = new ArrayList();
+        this.successors = new ArrayList();
+    }
+    
+    public ArrayList<Activity> getPredecessors(){
+        return predecessors;
+    }
+    
+    public ArrayList<Activity> getSuccessors(){
+        return successors;
+    }
+    
+     public double getResources() {
+        return resources;
+    }
+
+    public void setResources(double resources) {
+        this.resources = resources;
+    }
+    
     public String getActivityId() {
         return this.activityId;
     }
     
     public void setActivityId(String id) {
         this.activityId = id;
-    }
-    
-    public String getDescription() {
-        return this.description;
-    }
-    
-    public void setDescription(String d) {
-        this.description = d;
-    }
-    
-    public Double getOptimisticTime() {
-        return this.optimisticTime;
-    }
-    
-    public void setOptimisticTime(Double t) {
-        this.optimisticTime = t;
-    }
-    
-    public Double getMostLikelyTimeTime() {
-        return this.mostLikelyTimeTime;
-    }
-    
-    public void setMostLikelyTimeTime(Double t) {
-        this.mostLikelyTimeTime = t;
-    }
-    
-    public Double getPessimisticTime() {
-        return this.pessimisticTime;
-    }
-    
-    public void setPessimisticTime(Double t) {
-        this.pessimisticTime = t;
-    }
-    
+    }   
+
     public Double getDuration() {
         return this.duration;
     }
     
     public void setDuration(Double t) {
         this.duration = t;
-    }
-    
-    public Double getDeadline() {
-        return this.deadline;
-    }
-    
-    public void setDeadline(Double t) {
-        this.deadline = t;
     }
     
     public Double getEarliestStartTime() {
@@ -159,4 +146,6 @@ public class Activity {
     public void setIndependentSlack(float s) {
         this.independentSlack = s;
     }
+    
+    
 }
