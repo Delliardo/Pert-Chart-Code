@@ -78,7 +78,7 @@ public class PertChartGUI extends JFrame implements ActionListener {
         simulationGraph = new JButton("Show Graph");
         simulationGraph.addActionListener(this);
         simulationGraph.setVisible(false);
-        projectPanel.add(simulationGraph);
+       // projectPanel.add(simulationGraph);
 
         add(projectPanel, BorderLayout.SOUTH);
 //        SimulatorGraph graph = new SimulatorGraph();
@@ -99,6 +99,9 @@ public class PertChartGUI extends JFrame implements ActionListener {
         if (e.getSource() == runSim) {
             runSimulator();
         } else if (e.getSource() == simulationGraph) {
+            /*
+            
+            This code can be used later to display the graph
             JFrame frame = new JFrame();
             frame.setTitle("Simulation Graph");
             frame.setResizable(true);
@@ -107,6 +110,7 @@ public class PertChartGUI extends JFrame implements ActionListener {
             frame.setSize(500,350);
             graph = new SimulatorGraph();
             frame.add(graph);
+            */
 
         }
 
