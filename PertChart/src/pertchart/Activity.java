@@ -14,9 +14,11 @@ import java.util.ArrayList;
 public class Activity {
     
     
-    //Values from the input 
+    // user input
     private String activityId;
-    private double duration;
+    private double optimisticTime;
+    private double mostLikelyTime;
+    private double pessimisticTime;
     private double resources;
 
     private String predecessorsInput;
@@ -24,6 +26,7 @@ public class Activity {
     private ArrayList<Activity> successors;
     
     //To be calculated from doing the CPM portion
+    private double expectedTime;
     private double earliestStartTime;
     private double latestStartTime;
     private double earliestCompletionTime;
@@ -33,14 +36,41 @@ public class Activity {
     private float freeSlack;
     private float interferingSlack;
     private float independentSlack;
+    private double duration;
     
-    Activity(String a, double d, String p, double r){
-        this.activityId = a;
-        this.duration = d;
+    Activity(String aId, double a, double m, double b, String p, double r) {
+        this.activityId = aId;
+        this.optimisticTime = a;
+        this.mostLikelyTime = m;
+        this.pessimisticTime = b;
         this.predecessorsInput = p;
         this.resources = r;
         this.predecessors = new ArrayList();
         this.successors = new ArrayList();
+    }
+    
+    public Double getOptimisticTime() {
+        return optimisticTime;
+    }
+
+    public void setOptimisticTime(double optimisticTime) {
+        this.optimisticTime = optimisticTime;
+    }
+
+    public Double getMostLikelyTime() {
+        return mostLikelyTime;
+    }
+
+    public void setMostLikelyTime(double mostLikelyTime) {
+        this.mostLikelyTime = mostLikelyTime;
+    }
+
+    public Double getPessimisticTime() {
+        return pessimisticTime;
+    }
+
+    public void setPessimisticTime(double pessimisticTime) {
+        this.pessimisticTime = pessimisticTime;
     }
     
     public ArrayList<Activity> getPredecessors(){
@@ -51,7 +81,7 @@ public class Activity {
         return successors;
     }
     
-    public double getResources() {
+    public Double getResources() {
         return resources;
     }
 
@@ -75,12 +105,12 @@ public class Activity {
         this.activityId = id;
     }   
 
-    public Double getDuration() {
-        return this.duration;
+    public Double getExpectedTime() {
+        return this.expectedTime;
     }
     
-    public void setDuration(Double t) {
-        this.duration = t;
+    public void setExpectedTime(Double t) {
+        this.expectedTime = t;
     }
     
     public Double getEarliestStartTime() {
@@ -155,5 +185,11 @@ public class Activity {
         this.independentSlack = s;
     }
     
+    public double getDuration() {
+        return this.duration;
+    }
     
+    public void setDuration(double d) {
+        this.duration = d;
+    }
 }
