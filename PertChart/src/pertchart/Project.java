@@ -12,6 +12,7 @@ package pertchart;
 public class Project {
     // user input
     private String durationInterval;
+    private double resources;
 
     private double duration;
     private double probabilityByDeadline;
@@ -22,8 +23,18 @@ public class Project {
     private double expectedDuration;
     private double expectedDurationStandardDeviation;
     
-    Project(String di) {
+    Project(String di, double resources) {
+        this.resources = resources;
         this.durationInterval = di;
+    }
+    
+    
+    public double getResources() {
+        return resources;
+    }
+
+    public void setResources(double resources) {
+        this.resources = resources;
     }
     
     public String getDurationInterval() {
