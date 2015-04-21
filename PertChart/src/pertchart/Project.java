@@ -10,10 +10,7 @@ package pertchart;
  * @author zac
  */
 public class Project {
-    //We need to input these
-    private double optimisticTime;
-    private double mostLikelyTime;
-    private double pessimisticTime;
+    // user input
     private String durationInterval;
 
     private double duration;
@@ -25,10 +22,7 @@ public class Project {
     private double expectedDuration;
     private double expectedDurationStandardDeviation;
     
-    Project(double a, double m, double b, String di) {
-        this.optimisticTime = a;
-        this.mostLikelyTime = m;
-        this.pessimisticTime = b;
+    Project(String di) {
         this.durationInterval = di;
     }
     
@@ -94,29 +88,5 @@ public class Project {
     
     public void setExpectedDurationStandardDeviation(Double t) {
         this.expectedDurationStandardDeviation = t;
-    }
-    
-     public Double getOptimisticTime() {
-        return this.optimisticTime;
-    }
-    
-    public void setOptimisticTime(Double t) {
-        this.optimisticTime = t;
-    }
-    
-    public Double getMostLikelyTime() {
-        return this.mostLikelyTime;
-    }
-    
-    public void setMostLikelyTime(Double t) {
-        this.mostLikelyTime = t;
-    }
-    
-    public Double getPessimisticTime() {
-        return this.pessimisticTime;
-    }
-    
-    public void setPessimisticTime(Double t) {
-        this.pessimisticTime = t;
     }
 }
