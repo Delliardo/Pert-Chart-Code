@@ -29,7 +29,7 @@ public class Calculations {
     private String timeUnit;
     private double totalResources;
     private double averageProjectCompletionTime = 0.0;
-    private double simLength = 10000.0;
+    private double simLength = 5000000.0; // 5 million runs
     
     public Calculations(String di, int tr) {
         this.timeUnit = di;
@@ -44,7 +44,19 @@ public class Calculations {
         generateHashMap();
         
         // run simulation
-        for (int i = 0; i < simLength; i++) {
+        System.out.print("Simulation running...");
+        int scaler = 0;
+        for (int i = 0; i < this.simLength; i++) {
+            if (((double)i + 1.0) % (this.simLength / 10.0) == 0) {
+                if (scaler + 1 < 10) {
+                    scaler = scaler + 1;
+                    System.out.print((10 * scaler)  + "%...");
+                }
+                else {
+                    System.out.print(100 + "%!!!");
+                    System.out.println("");
+                }
+            }
             this.simActivities = this.activities;
             calculateActvityCompletionTime();
             calculateProjectCompletionTime();
@@ -149,56 +161,63 @@ public class Calculations {
                 activitiesQueue.add(a);
             }
         }
-        boolean resourcesAreAvailable = false;
         while (activitiesQueue.size() > 0) {
-            Activity a = activitiesQueue.remove(0);
-            resourcesAreAvailable = false;
+            Activity a = activitiesQueue.get(0);
             if (this.totalResources >= a.getResources()) {
-                resourcesAreAvailable = true;
                 this.totalResources = this.totalResources - a.getResources();
             }
             else {
                 JOptionPane.showMessageDialog(null, "There are not enough resources for this project.");
                 System.exit(0);
             }
-            while (resourcesAreAvailable) {
-                double completionTime = a.getStartTime() + a.getExpectedTime();
-                a.setCompletionTime(completionTime);
-                completedActvities.add(a);
-                
-                // update our hash map for the final results
-                Double[] d = this.activityMap.get(a.getActivityId());
-                d[0] = d[0] + a.getAverageVariance();
+            double completionTime = a.getStartTime() + a.getExpectedTime();
+            a.setCompletionTime(completionTime);
+            completedActvities.add(a);
+
+            // update our hash map for the final results
+            double numOfPredecessors = a.getPredecessors().size();
+            Double[] d = this.activityMap.get(a.getActivityId());
+            d[0] = d[0] + a.getAverageVariance();
+            if (numOfPredecessors > 1) {
+                d[1] = d[1] + (a.getStartTime() / numOfPredecessors);
+                d[2] = d[2] + (completionTime / numOfPredecessors);
+            }
+            else {
                 d[1] = d[1] + a.getStartTime();
                 d[2] = d[2] + completionTime;
-                this.activityMap.put(a.getActivityId(), d);
+            }
+            this.activityMap.put(a.getActivityId(), d);
 
-                // check if this activities completion time is higher than the project's
-                if (completionTime > projectCompletionTime) {
-                    projectCompletionTime = completionTime;
-                }
+            // check if this activities completion time is higher than the project's
+            if (completionTime > projectCompletionTime) {
+                projectCompletionTime = completionTime;
+            }
 
-                // push next activities into queue whose successors have finished
-                for (Activity successor: a.getSuccessors()) {
-                    ArrayList<Activity> predecessorList = successor.getPredecessors();
-                    int pListL = predecessorList.size();
-                    int completedPredecessors = 0;
-                    for (int i = 0; i < pListL; i++) {
-                        Activity predecessor = predecessorList.get(i);
-                        if (activityHasBeenCompleted(predecessor.getActivityId())) {
-                            completedPredecessors = completedPredecessors + 1;
+            // push next activities into queue whose successors have finished
+            for (Activity successor: a.getSuccessors()) {
+                ArrayList<Activity> predecessorList = successor.getPredecessors();
+                int pListL = predecessorList.size();
+                int completedPredecessors = 0;
+                double maxPredecessorCompletionTime = 0.0;
+                for (int i = 0; i < pListL; i++) {
+                    Activity predecessor = predecessorList.get(i);
+                    if (activityHasBeenCompleted(predecessor.getActivityId())) {
+                        completedPredecessors = completedPredecessors + 1;
+                        if (maxPredecessorCompletionTime < predecessor.getCompletionTime()) {
+                            maxPredecessorCompletionTime = predecessor.getCompletionTime();
                         }
                     }
-
-                    // if all predecessors have been completed then push the successor into the queue
-                    if (completedPredecessors == pListL) {
-                        successor.setStartTime(a.getCompletionTime());
-                        activitiesQueue.add(successor);
-                    }
                 }
-                this.totalResources = this.totalResources + a.getResources();
-                break;
+
+                // if all predecessors have been completed then push the successor into the queue
+                if (completedPredecessors == pListL) {
+                    successor.setStartTime(maxPredecessorCompletionTime);
+                    activitiesQueue.add(successor);
+                }
             }
+            this.totalResources = this.totalResources + a.getResources();
+            // its now safe to remove the activity
+            activitiesQueue.remove(0);
         }
         this.averageProjectCompletionTime = this.averageProjectCompletionTime + projectCompletionTime;
         project.setCompletionTime(projectCompletionTime);
@@ -226,5 +245,9 @@ public class Calculations {
     
     public Double getProjectCompletionTime() {
         return this.averageProjectCompletionTime;
+    }
+    
+    public String getTimeUnit() {
+        return this.timeUnit;
     }
 }

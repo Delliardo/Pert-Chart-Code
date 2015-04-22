@@ -53,7 +53,7 @@ public class Results extends JFrame implements ActionListener
         column5.setPreferredWidth(15); //set column width 
         
         TableColumn column6 = new TableColumn(5); 
-        column6.setHeaderValue("Variance (s^2)"); // set column name 
+        column6.setHeaderValue("Variance (s\u00B2)"); // set column name 
         column6.setPreferredWidth(50); //set column width 
         
         TableColumn column7 = new TableColumn(6); 
@@ -104,7 +104,7 @@ public class Results extends JFrame implements ActionListener
                
         timePanel = new JPanel();
         TotalTime = new JLabel("Project Completion Time: ");
-        timeNum = new JLabel(projectTime + "");
+        timeNum = new JLabel(projectTime + " " + calculations.getTimeUnit());
         timePanel.add(TotalTime);
         timePanel.add(timeNum);
         add(timePanel, BorderLayout.SOUTH);
