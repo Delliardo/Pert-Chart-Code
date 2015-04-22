@@ -105,7 +105,7 @@ public class Activity {
     }
     
     public String getPredecessorsInput() {
-        return predecessorsInput;
+        return this.predecessorsInput;
     }
 
     public void setPredecessorsInput(String p) {
@@ -177,10 +177,10 @@ public class Activity {
     }
     
     public double getAverageVariance() {
-        return this.expectedTime;
+        return this.averageVariance;
     }
     
     public void setAverageVariance(double d) {
-        this.expectedTime = d;
+        this.averageVariance = d;
     }
 }

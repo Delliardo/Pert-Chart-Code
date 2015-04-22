@@ -29,7 +29,7 @@ public class Calculations {
     private String timeUnit;
     private double totalResources;
     private double averageProjectCompletionTime = 0.0;
-    private double simLength = 1000.0;
+    private double simLength = 10000.0;
     
     public Calculations(String di, int tr) {
         this.timeUnit = di;
@@ -42,9 +42,6 @@ public class Calculations {
         determinePredecessors();
         determineSuccessors();
         generateHashMap();
-        
-        // copy the activities and project to use for final results
-        this.activityResults = this.activities;
         
         // run simulation
         for (int i = 0; i < simLength; i++) {
@@ -62,7 +59,6 @@ public class Calculations {
             d[1] = d[1] / this.simLength;
             d[2] = d[2] / this.simLength;
             a.setValue(d);
-            it.remove();
         }
         
         this.averageProjectCompletionTime = this.averageProjectCompletionTime / this.simLength;
@@ -76,20 +72,6 @@ public class Calculations {
     }
     
     public Activity getActivityById(String s) {
-        Activity a = null;
-        for (Activity b: this.activityResults) {
-            if (s.equalsIgnoreCase(b.getActivityId()) == false) {
-               continue;
-            }
-            else {
-                a = b;
-                break;
-            }
-        }
-        return a;
-    }
-    
-    public Activity getActivityResultById(String s) {
         Activity a = null;
         for (Activity b: this.activities) {
             if (s.equalsIgnoreCase(b.getActivityId()) == false) {
@@ -167,16 +149,19 @@ public class Calculations {
                 activitiesQueue.add(a);
             }
         }
-        int currentActivityIndex = 0;
+        boolean resourcesAreAvailable = false;
         while (activitiesQueue.size() > 0) {
-            Activity a = activitiesQueue.get(currentActivityIndex);
-            while (this.totalResources > a.getResources()) {
-                if (currentActivityIndex <= 0) {
-                    currentActivityIndex = 0;
-                }
-                else {
-                    currentActivityIndex--;
-                }
+            Activity a = activitiesQueue.remove(0);
+            resourcesAreAvailable = false;
+            if (this.totalResources >= a.getResources()) {
+                resourcesAreAvailable = true;
+                this.totalResources = this.totalResources - a.getResources();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "There are not enough resources for this project.");
+                System.exit(0);
+            }
+            while (resourcesAreAvailable) {
                 double completionTime = a.getStartTime() + a.getExpectedTime();
                 a.setCompletionTime(completionTime);
                 completedActvities.add(a);
@@ -211,10 +196,7 @@ public class Calculations {
                         activitiesQueue.add(successor);
                     }
                 }
-            }
-            currentActivityIndex++;
-            if (currentActivityIndex > activitiesQueue.size() - 1) {
-                JOptionPane.showMessageDialog(null, "There are not enough resources for this project.");
+                this.totalResources = this.totalResources + a.getResources();
                 break;
             }
         }
