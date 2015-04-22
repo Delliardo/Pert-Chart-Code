@@ -14,7 +14,7 @@ public class Project {
     private String durationInterval;
     private double resources;
 
-    private double duration;
+    private double completionTime;
     private double probabilityByDeadline;
     private float totalMinSlack;
     
@@ -22,6 +22,8 @@ public class Project {
     private double probabilityOnTime;
     private double expectedDuration;
     private double expectedDurationStandardDeviation;
+    
+    private double averageCompletionTime;
     
     Project(String di, double resources) {
         this.resources = resources;
@@ -45,12 +47,12 @@ public class Project {
         this.durationInterval = durationInterval;
     }
     
-    public Double getDuration() {
-        return this.duration;
+    public Double getCompletionTime() {
+        return this.completionTime;
     }
     
-    public void setDuration(Double t) {
-        this.duration = t;
+    public void setCompletionTime(Double t) {
+        this.completionTime = t;
     }
     
     public Double getProbabilityOnTime() {
@@ -99,5 +101,13 @@ public class Project {
     
     public void setExpectedDurationStandardDeviation(Double t) {
         this.expectedDurationStandardDeviation = t;
+    }
+            
+    public Double getAverageCompletionTime() {
+        return this.averageCompletionTime;
+    }
+    
+    public void setAverageCompletionTime(Double t) {
+        this.averageCompletionTime = t;
     }
 }
