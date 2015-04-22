@@ -29,7 +29,7 @@ public class Calculations {
     private String timeUnit;
     private double totalResources;
     private double averageProjectCompletionTime = 0.0;
-    private double simLength = 5000000.0; // 5 million runs
+    private double simLength = 4000000.0; // 5 million runs
     
     public Calculations(String di, int tr) {
         this.timeUnit = di;
@@ -163,7 +163,7 @@ public class Calculations {
         }
         while (activitiesQueue.size() > 0) {
             Activity a = activitiesQueue.get(0);
-            if (this.totalResources >= a.getResources()) {
+            if (a.getResources() <= this.totalResources) {
                 this.totalResources = this.totalResources - a.getResources();
             }
             else {
@@ -192,6 +192,9 @@ public class Calculations {
             if (completionTime > projectCompletionTime) {
                 projectCompletionTime = completionTime;
             }
+            
+            // release the resources
+            this.totalResources = this.totalResources + a.getResources();
 
             // push next activities into queue whose successors have finished
             for (Activity successor: a.getSuccessors()) {
@@ -211,11 +214,13 @@ public class Calculations {
 
                 // if all predecessors have been completed then push the successor into the queue
                 if (completedPredecessors == pListL) {
-                    successor.setStartTime(maxPredecessorCompletionTime);
-                    activitiesQueue.add(successor);
+                    // if there are enough resources available
+                    if (successor.getResources() <= this.totalResources) {
+                        successor.setStartTime(maxPredecessorCompletionTime);
+                        activitiesQueue.add(successor);
+                    }
                 }
             }
-            this.totalResources = this.totalResources + a.getResources();
             // its now safe to remove the activity
             activitiesQueue.remove(0);
         }
