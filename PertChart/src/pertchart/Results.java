@@ -2,6 +2,7 @@ package pertchart;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -15,7 +16,7 @@ public class Results extends JFrame implements ActionListener
     private JLabel TotalResources, resNum, TotalTime, timeNum;
     
     //private JButton single, runSim;
-    
+    private DecimalFormat df;
     private DefaultTableModel resultsModel;
     private JTable resultsTable;
     //private String[] columns = {"Activity ID", "Predecessors", "A", "M", "B", "Variance", "Start Time", "Completion Time"};
@@ -84,7 +85,11 @@ public class Results extends JFrame implements ActionListener
                 Map.Entry e = (Map.Entry)it.next();
                 if (a.getActivityId() == e.getKey()) {
                     Double[] d = (Double[])e.getValue();
-                    Object[] row = {a.getActivityId(), a.getPredecessorsInput(), a.getA(), a.getM(), a.getB(), d[0], d[1], d[2]};
+                    df = new DecimalFormat("####.####");
+                    double var = Double.parseDouble(df.format(d[0]));
+                    double start = Double.parseDouble(df.format(d[1]));
+                    double end = Double.parseDouble(df.format(d[2]));
+                    Object[] row = {a.getActivityId(), a.getPredecessorsInput(), a.getA(), a.getM(), a.getB(), var, start, end};
                     resultsModel.addRow(row);
                 }
             }
@@ -104,7 +109,8 @@ public class Results extends JFrame implements ActionListener
                
         timePanel = new JPanel();
         TotalTime = new JLabel("Project Completion Time: ");
-        timeNum = new JLabel(projectTime + " " + calculations.getTimeUnit());
+        Double formatedProjectTime = Double.parseDouble(df.format(projectTime));
+        timeNum = new JLabel(formatedProjectTime + " " + calculations.getTimeUnit());
         timePanel.add(TotalTime);
         timePanel.add(timeNum);
         add(timePanel, BorderLayout.SOUTH);
