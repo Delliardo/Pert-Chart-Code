@@ -29,7 +29,11 @@ public class Calculations {
     private String timeUnit;
     private double totalResources;
     private double averageProjectCompletionTime = 0.0;
-    private double simLength = 4000000.0; // 5 million runs
+    private double simLength = 1000.0; // 5 million runs
+    private int arraySize = (int)this.simLength;
+    private double[] projectCompletionTimes = new double[(int)this.simLength];
+    private double maxProjectCompletionTime;
+    private double minProjectCompletionTime;
     
     public Calculations(String di, int tr) {
         this.timeUnit = di;
@@ -44,10 +48,10 @@ public class Calculations {
         generateHashMap();
         
         // run simulation
-        System.out.print("Simulation running...");
-        int scaler = 0;
+        //System.out.print("Simulation running...");
+        //int scaler = 0;
         for (int i = 0; i < this.simLength; i++) {
-            if (((double)i + 1.0) % (this.simLength / 10.0) == 0) {
+            /*if (((double)i + 1.0) % (this.simLength / 10.0) == 0) {
                 if (scaler + 1 < 10) {
                     scaler = scaler + 1;
                     System.out.print((10 * scaler)  + "%...");
@@ -56,10 +60,10 @@ public class Calculations {
                     System.out.print(100 + "%!!!");
                     System.out.println("");
                 }
-            }
+            }*/
             this.simActivities = this.activities;
             calculateActvityCompletionTime();
-            calculateProjectCompletionTime();
+            calculateProjectCompletionTime(i);
         }
         
         // calculate the final results
@@ -73,7 +77,22 @@ public class Calculations {
             a.setValue(d);
         }
         
+        // max and min project completion times
         this.averageProjectCompletionTime = this.averageProjectCompletionTime / this.simLength;
+        int pl = this.projectCompletionTimes.length;
+        double minTime = this.averageProjectCompletionTime;
+        double maxTime = this.averageProjectCompletionTime;
+        for (int i = 0; i < pl; i++) {
+            double pTime = this.projectCompletionTimes[i];
+            if (maxTime < pTime) {
+                maxTime = pTime;
+            }
+            if (minTime > pTime && pTime > 0.0) {
+                minTime = pTime;
+            }
+        }
+        this.maxProjectCompletionTime = maxTime;
+        this.minProjectCompletionTime = minTime;
     }
     
     public void generateHashMap() {
@@ -138,7 +157,7 @@ public class Calculations {
                 earlyTimeRange = (amb + a.getA()) / 2.0;
             }
             double range = lateTimeRange - earlyTimeRange;
-            double scaled = random.nextDouble() * range;
+            double scaled = random.nextGaussian() * range;
             double expectedTime = scaled + earlyTimeRange;
             a.setExpectedTime(expectedTime);
             
@@ -148,7 +167,7 @@ public class Calculations {
         }
     }
     
-    public void calculateProjectCompletionTime() {
+    public void calculateProjectCompletionTime(int currentSimCycle) {
         double projectCompletionTime = 0.0;
         // push all activities that have no predecessors into the queue
         for (Activity a: this.simActivities) {
@@ -225,6 +244,7 @@ public class Calculations {
             activitiesQueue.remove(0);
         }
         this.averageProjectCompletionTime = this.averageProjectCompletionTime + projectCompletionTime;
+        projectCompletionTimes[currentSimCycle] = projectCompletionTime;
         project.setCompletionTime(projectCompletionTime);
     }
     
@@ -250,6 +270,18 @@ public class Calculations {
     
     public Double getProjectCompletionTime() {
         return this.averageProjectCompletionTime;
+    }
+    
+    public double[] getProjectCompletionTimes() {
+        return this.projectCompletionTimes;
+    }
+    
+    public Double getMaxProjectCompletionTime() {
+        return this.maxProjectCompletionTime;
+    }
+    
+    public Double getMinProjectCompletionTime() {
+        return this.minProjectCompletionTime;
     }
     
     public String getTimeUnit() {
